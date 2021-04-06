@@ -375,11 +375,9 @@ if (ZSTD_LIBRARY)
     endif ()
 endif()
 
-set (LZMA_LIBRARY liblzma)
-set (LZMA_INCLUDE_DIR ${ClickHouse_SOURCE_DIR}/contrib/xz/src/liblzma/api)
-if (LZMA_LIBRARY)
-    target_link_libraries (clickhouse_common_io PUBLIC ${LZMA_LIBRARY})
-    target_include_directories (clickhouse_common_io SYSTEM BEFORE PUBLIC ${LZMA_INCLUDE_DIR})
+if (XZ_LIBRARY)
+    target_link_libraries (clickhouse_common_io PUBLIC ${XZ_LIBRARY})
+    target_include_directories (clickhouse_common_io SYSTEM BEFORE PUBLIC ${XZ_INCLUDE_DIR})
 endif()
 
 if (USE_ICU)
@@ -470,6 +468,10 @@ if (USE_LIBPQXX)
     dbms_target_link_libraries(PUBLIC ${LIBPQXX_LIBRARY})
     dbms_target_include_directories(SYSTEM BEFORE PUBLIC ${LIBPQXX_INCLUDE_DIR})
 endif()
+
+if (USE_DATASKETCHES)
+    target_include_directories (clickhouse_aggregate_functions SYSTEM BEFORE PRIVATE ${DATASKETCHES_INCLUDE_DIR})
+endif ()
 
 dbms_target_link_libraries(PRIVATE _boost_context)
 
